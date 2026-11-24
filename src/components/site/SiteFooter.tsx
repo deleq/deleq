@@ -61,7 +61,7 @@ export function SiteFooter() {
               <li>
                 {guardLive() ? (
                   <a className="l" href={`${CHAIN.explorer}/address/${CONTRACTS.guard}`} target="_blank" rel="noreferrer">
-                    DeleqMandateGuard
+                    DeleqMandateGuard {CONTRACTS.guard.slice(0, 6)}…{CONTRACTS.guard.slice(-4)}
                   </a>
                 ) : (
                   <Link className="l" href="/method#contract">

@@ -1,18 +1,18 @@
 import { isAddress } from "@/config/brand";
 
 /*
- * Deleq's own contract on Robinhood Chain (chain 4663). Not deployed yet: the owner deploys it from /deploy (localhost only),
- * then pastes the three values below and runs `npm run verify-deployment -- --guard <address> --guard-tx <tx>`.
+ * Deleq's own contract on Robinhood Chain (chain 4663), deployed by the owner on 24 Nov 2026 (block 122213192, 2,955,030 gas).
+ * Check it yourself: `npm run verify-deployment -- --guard <address> --guard-tx <tx>` (values below) prints MATCH.
  *   guard  DeleqMandateGuard (+ internal library DeleqLimitMath, inlined, nothing to link): mandates per owner and agent,
  *          checkTransfer / checkSwap reason bits, executeTransfer (owner -> allowlisted recipient) and executeSwapV3
  *          (output forced to the owner). No admin, no fee, no upgrade, never holds a balance at rest.
  */
 const DEPLOYED = {
-  guard: "",
+  guard: "0x57dd851d840b1f0a2896dc1524c398c4574ff3c1",
   /** Block of the deployment transaction. */
-  block: 0,
+  block: 122213192,
   /** Creation transaction. */
-  tx: "",
+  tx: "0xc7cad03d8f45fef6cc0833d85bcb90bfa167b3d8b76cef4a5cfb89aaa17de403",
 };
 
 /**

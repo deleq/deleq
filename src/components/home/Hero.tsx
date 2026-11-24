@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { BRAND, CHAIN } from "@/config/brand";
-import { guardLive } from "@/config/contracts";
+import { CONTRACTS, guardLive } from "@/config/contracts";
 import { CaBox } from "@/components/site/CaCopy";
 import { useChain } from "@/components/home/useChain";
 import { ago } from "@/lib/format";
@@ -22,7 +22,7 @@ function Ticker() {
     `${CHAIN.name} block ${data?.block ? data.block.toLocaleString("en-US") : "—"}`,
     `Gas ${gwei(data?.gasPriceWei ?? null)}`,
     `ETH / USD ${data?.ethUsd ? `$${data.ethUsd.price.toLocaleString("en-US", { maximumFractionDigits: 2 })} (Chainlink, ${ago(data.ethUsd.updatedAt)})` : "—"}`,
-    guardLive() ? "DeleqMandateGuard live" : "DeleqMandateGuard not deployed yet",
+    guardLive() ? `DeleqMandateGuard live at ${CONTRACTS.guard.slice(0, 6)}…${CONTRACTS.guard.slice(-4)}` : "DeleqMandateGuard not deployed yet",
     "Per-tx cap · daily cap (UTC) · allowlists · pause · revoke",
     "Funds stay in the owner's wallet",
     "Native ETH not supported in v1: wrap to WETH",

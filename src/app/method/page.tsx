@@ -1,6 +1,6 @@
 import { JsonLd } from "@/components/JsonLd";
 import { PageHead, StatusBadge } from "@/components/site/PageHead";
-import { BRAND, CHAIN, explorerAddress } from "@/config/brand";
+import { BRAND, CHAIN, explorerAddress, explorerTx } from "@/config/brand";
 import { CONTRACTS, guardLive } from "@/config/contracts";
 import { ETH_USD_FEED, PONS, UNISWAP_V3, USDG, WETH } from "@/config/dex";
 import { BIT_ORDER, BIT_WORDS, BITS } from "@/lib/mandate/bits";
@@ -23,7 +23,7 @@ const A = ({ a, children }: { a: string; children: React.ReactNode }) => (
 const STATUS: { s: "Prototype" | "Concept"; what: string }[] = [
   { s: "Prototype", what: "Mandate editor and checks in practice mode (sample data, same rules as the contract)" },
   { s: "Prototype", what: "Token check read from Robinhood Chain at one block (code, ERC-20, proxy slots, owner, selectors, Pons launch, Uniswap v3 pools)" },
-  { s: "Prototype", what: "DeleqMandateGuard: mandates, check views, transfers and Uniswap v3 swaps (tested on a Robinhood Chain fork; not deployed yet)" },
+  { s: "Prototype", what: "DeleqMandateGuard: mandates, check views, transfers and Uniswap v3 swaps (live on Robinhood Chain, source verified, bytecode checked against this build)" },
   { s: "Prototype", what: "Dashboard: executed actions from the guard's events, rejections from pre-checks, pause / unpause / revoke" },
   { s: "Prototype", what: "Example agent script (examples/agent.mjs): reads its mandate, checks, executes" },
   { s: "Concept", what: "Swaps through Pons launch curves (native ETH, no recipient the guard can force)" },
@@ -94,7 +94,11 @@ export default function MethodPage() {
           <strong>DeleqMandateGuard</strong> (with the internal library DeleqLimitMath) is{" "}
           {guardLive() ? (
             <>
-              deployed at <A a={CONTRACTS.guard}>{CONTRACTS.guard}</A>.
+              deployed at <A a={CONTRACTS.guard}>{CONTRACTS.guard}</A> (block {CONTRACTS.block.toLocaleString("en-US")}, creation transaction{" "}
+              <a className="underline decoration-[var(--line-2)]" href={explorerTx(CONTRACTS.tx)} target="_blank" rel="noreferrer">
+                {CONTRACTS.tx.slice(0, 10)}…
+              </a>
+              ). Its source is verified on the explorer (exact match on Sourcify), and <code>npm run verify-deployment</code> in the repository prints MATCH for it: the code at that address is this build.
             </>
           ) : (
             <>not deployed on {CHAIN.name} yet. The owner deploys it from a local-only tool; this page will then link it.</>

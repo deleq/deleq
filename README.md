@@ -10,7 +10,7 @@ This repository is the working code behind https://deleq.xyz.
 
 - **What runs today.** The console (`/console`) with a practice mode that runs the guard's rules on sample data in the browser, the on-chain mode that creates mandates and asks the guard's own check view, the dashboard (`/dashboard`) with executed actions, rejected proposals, pause and revoke, and an example agent script (`examples/agent.mjs`).
 - **What reads live data.** The token check next to each proposal reads the token from Robinhood Chain at one block (code, ERC-20 metadata, proxy slots, `owner()`, function selectors in the bytecode, Pons launch, Uniswap v3 pools). The home page ticker reads the head block, gas price and the Chainlink ETH / USD feed. The dashboard reads the guard's events.
-- **The contract.** `DeleqMandateGuard` is written and tested (unit, fuzz, invariant and Robinhood Chain fork tests) but **not deployed yet**. It never holds a balance between transactions, has no admin, no fee and no upgrade path, and has not had an outside security review.
+- **The contract.** `DeleqMandateGuard` is live on Robinhood Chain at `0x57dd851d840b1f0a2896dc1524c398c4574ff3c1`, source-verified on the explorer, and tested (unit, fuzz, invariant and Robinhood Chain fork tests). It never holds a balance between transactions, has no admin, no fee and no upgrade path, and has not had an outside security review.
 - **Planned, not built.** Swaps through Pons launch curves, and advanced risk checks and alerts paid with $DELEQ. Both are labelled Concept on the site.
 - **What nothing here claims.** A limit bounds how much an agent can lose per transaction and per day; it does not make its trades good. A clean token check does not make a token safe. $DELEQ has no promised value.
 
@@ -18,7 +18,7 @@ This repository is the working code behind https://deleq.xyz.
 
 | Path | What it is |
 |---|---|
-| `src/app/` | Pages (`/`, `/console`, `/dashboard`, `/method`, `/token`, local-only `/deploy`) and API routes (`/api/chain`, `/api/rpc`, `/api/token-check`, `/api/activity`). |
+| `src/app/` | Pages (`/`, `/console`, `/dashboard`, `/method`, `/token`) and API routes (`/api/chain`, `/api/rpc`, `/api/token-check`, `/api/activity`). |
 | `src/components/` | Interface components: home sections, console, dashboard, wallet dialog. |
 | `src/config/` | `brand.ts` (name, ticker, token address, links), `contracts.ts` (guard address), `dex.ts` (Robinhood Chain addresses read on chain). |
 | `src/lib/mandate/` | The mandate rules in TypeScript (`engine.ts`, `bits.ts`), the same as the contract, plus practice-mode storage. |
@@ -54,7 +54,9 @@ forge test --match-contract Fork --fork-url https://rpc.mainnet.chain.robinhood.
 
 ### What was checked for this snapshot
 
-2026-11-24 (UTC), Node.js 25.8.2, forge 1.5.1: typecheck exit 0; `npm test` 32 pass / 0 fail; `next build` 19 routes; `forge test` 32 passed (27 unit and fuzz tests in `DeleqMandateGuardTest`, 4 invariants plus 1 handler test in `DeleqMandateGuardInvariantTest`); fork suite 6 passed against Robinhood Chain mainnet state (a real WETH to USDG swap through Uniswap v3 SwapRouter02 paid the owner and left nothing in the guard). An end-to-end browser run on a local fork of Robinhood Chain (chain id 4663) with injected test wallets and the example agent is kept with the project's working notes, not in this repository.
+2026-11-24 (UTC): the guard deployed on Robinhood Chain mainnet (block 122213192) matches this build (`verify-deployment` MATCH; Sourcify exact match for creation and runtime code).
+
+2026-11-24 (UTC), Node.js 25.8.2, forge 1.5.1: typecheck exit 0; `npm test` 32 pass / 0 fail; `next build` 19 routes (18 after the owner-only deploy page was removed); `forge test` 32 passed (27 unit and fuzz tests in `DeleqMandateGuardTest`, 4 invariants plus 1 handler test in `DeleqMandateGuardInvariantTest`); fork suite 6 passed against Robinhood Chain mainnet state (a real WETH to USDG swap through Uniswap v3 SwapRouter02 paid the owner and left nothing in the guard). An end-to-end browser run on a local fork of Robinhood Chain (chain id 4663) with injected test wallets and the example agent is kept with the project's working notes, not in this repository.
 
 ## Look at the site
 
@@ -64,20 +66,20 @@ npm run build
 npm start
 ```
 
-Open http://localhost:6650. Without any configuration the site reads Robinhood Chain through its public RPC: the console, practice mode, token check, method and token pages work. The on-chain mode and the dashboard say the guard is not deployed until `src/config/contracts.ts` has an address. WalletConnect shows "Not configured on this site yet" until `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` (32 hex characters) is set.
+Open http://localhost:6650. Without any configuration the site reads Robinhood Chain through its public RPC: the console, practice mode, token check, method and token pages work. The on-chain mode and the dashboard read the live guard set in `src/config/contracts.ts`. WalletConnect shows "Not configured on this site yet" until `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` (32 hex characters) is set.
 
 ## Contracts
 
 | Contract | Address | Explorer |
 |---|---|---|
-| `DeleqMandateGuard` (with the internal library `DeleqLimitMath`) | not deployed yet | — |
+| `DeleqMandateGuard` (with the internal library `DeleqLimitMath`) | `0x57dd851d840b1f0a2896dc1524c398c4574ff3c1` (block 122213192, tx `0xc7cad03d8f45fef6cc0833d85bcb90bfa167b3d8b76cef4a5cfb89aaa17de403`) | [Blockscout, verified source](https://robinhoodchain.blockscout.com/address/0x57dd851d840b1f0a2896dc1524c398c4574ff3c1?tab=contract) |
 
 The guard stores mandates (owner, agent, window, per-token caps, recipients, routers, actions per day), answers `checkTransfer` and `checkSwap` with a bitmask of 19 reasons, and executes `executeTransfer` (transferFrom owner → allowlisted recipient) and `executeSwapV3` (exactInputSingle on an allowlisted router, output forced to the owner, approval reset to zero, leftover check). Daily caps use calendar UTC days. It has no owner of the contract, no admin, no fee and no upgrade, and it holds no funds between transactions. Native ETH is not supported (wrap to WETH); fee-on-transfer tokens are refused.
 
 ## Verify a deployment
 
 ```
-npm run verify-deployment -- --guard <address> --guard-tx <creation tx hash>
+npm run verify-deployment -- --guard 0x57dd851d840b1f0a2896dc1524c398c4574ff3c1 --guard-tx 0xc7cad03d8f45fef6cc0833d85bcb90bfa167b3d8b76cef4a5cfb89aaa17de403
 ```
 
 The script compares the bytecode on Robinhood Chain with the build in this repository and prints MATCH or the first difference.
