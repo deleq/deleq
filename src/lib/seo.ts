@@ -25,13 +25,13 @@ export function pageMeta({
 }): Metadata {
   const url = `${BRAND.url}${path === "/" ? "" : path}`;
   // Child routes that set openGraph replace the inherited file-based image, so name it explicitly.
-  const images = [{ url: "/opengraph-image.jpg?v=aa58e51e", width: 1200, height: 630, alt: `${BRAND.tokenName} mark and the slogan "${BRAND.slogan}" on a blue band above a dark field.` }];
+  const images = [{ url: "/opengraph-image.jpg?v=9fb89f99", width: 1200, height: 630, alt: `${BRAND.tokenName} mark and wordmark on the blue banner above a dark band, with a large faded mark on the right.` }];
   return {
     title: { absolute: title },
     description,
     alternates: { canonical: url },
     openGraph: { type, url, siteName: BRAND.name, title, description, locale: "en_US", images },
-    twitter: { card: "summary_large_image", site: BRAND.xHandle, creator: BRAND.xHandle, title, description, images: [{ url: "/twitter-image.jpg?v=aa58e51e", alt: `${BRAND.tokenName} mark and the slogan "${BRAND.slogan}" on a blue band above a dark field.` }] },
+    twitter: { card: "summary_large_image", site: BRAND.xHandle, creator: BRAND.xHandle, title, description, images: [{ url: "/twitter-image.jpg?v=9fb89f99", alt: `${BRAND.tokenName} mark and wordmark on the blue banner above a dark band, with a large faded mark on the right.` }] },
     robots: noindex ? { index: false, follow: true } : undefined,
   };
 }

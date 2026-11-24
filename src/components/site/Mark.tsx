@@ -1,9 +1,9 @@
 /*
- * Deleq's mark: public/brand/mark.webp (placeholder from referensi/tools/make-assets.mjs until the owner's logo arrives; then
- * referensi/tools/apply-owner-assets.mjs). Drawn as a CSS mask filled with currentColor, so it follows the ink of its surface.
+ * Deleq's mark: the owner's logo (24 Nov 2026), trimmed to public/brand/mark.webp by referensi/tools/apply-owner-assets.mjs.
+ * Drawn as a CSS mask filled with currentColor, so the black original reads dark on the blue hero and light on the dark ground.
  * Bump ?v= when the file changes so cached copies are replaced.
  */
-const MARK_URL = "/brand/mark.webp?v=ab77342b";
+const MARK_URL = "/brand/mark.webp?v=ebf33d6c";
 
 export function MarkGlyph({ size = 22 }: { size?: number }) {
   const mask = `url(${MARK_URL}) center / contain no-repeat`;

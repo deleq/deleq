@@ -22,7 +22,7 @@ export default function TokenPage() {
       <div className="wrap grid grid-cols-1 gap-6 py-12 pb-24 lg:grid-cols-2">
         <section className="panel panel-b" data-testid="token-ca">
           <h2 className="display h-card flex items-center gap-3">
-            <img src="/brand/mark-tile.webp" alt={`${BRAND.symbol} logo`} width={44} height={44} className="block shrink-0" data-testid="token-logo" />
+            <img src="/brand/mark-tile.webp?v=96fcd258" alt={`${BRAND.symbol} logo`} width={44} height={44} className="block shrink-0" data-testid="token-logo" />
             Contract address
           </h2>
           <p className="small mt-3">

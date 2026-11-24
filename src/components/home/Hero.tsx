@@ -7,16 +7,10 @@ import { CaBox } from "@/components/site/CaCopy";
 import { useChain } from "@/components/home/useChain";
 import { ago } from "@/lib/format";
 
-/** The reference's giant outlined watermark, drawn from Deleq's own D-bracket mark. */
+/** The reference's giant faded watermark, drawn with the owner's mark (CSS mask, ink colour, low opacity). */
 export function Watermark({ className = "watermark" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 32 32" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="0.35">
-      <path d="M5 4h11.5a12 12 0 0 1 0 24H5z" />
-      <path d="M10 9v14h6.5a7 7 0 0 0 0-14z" />
-      <rect x="12.5" y="14.6" width="8.5" height="2.8" />
-      <path d="M2 4h1M2 28h1M29.5 16h1" />
-    </svg>
-  );
+  const mask = "url(/brand/mark.webp?v=ebf33d6c) center / contain no-repeat";
+  return <span aria-hidden="true" className={className} style={{ WebkitMask: mask, mask, background: "currentColor", aspectRatio: "1 / 1", display: "block" }} />;
 }
 
 const gwei = (wei: string | null) => (wei ? `${(Number(BigInt(wei)) / 1e9).toFixed(4)} GWEI` : "—");
