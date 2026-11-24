@@ -22,7 +22,7 @@ const SLUG = "deleq";
 const TICKER = "DELEQ";
 const DOMAIN = "deleq.xyz";
 /** X account of the project (the owner's handle, exactly as written in the order). */
-const X_HANDLE = "deleq";
+const X_HANDLE = "deleqxyz";
 
 export const BRAND = {
   name: NAME,
@@ -41,8 +41,8 @@ export const BRAND = {
   description: `${NAME} gives a trading agent a mandate instead of your keys: which tokens it may spend, a per-transaction cap and a daily cap for each, which recipients and swap routers it may use, and until when. Every proposal is checked against the mandate and against what the chain says about the token before anything is signed, and the guard contract enforces the same limits on chain. Pause or revoke counts from the next block. Non-custodial: funds stay in your wallet.`,
   x: `https://x.com/${X_HANDLE}`,
   xHandle: `@${X_HANDLE}`,
-  // Public source repository: none yet, so the link stays hidden (hasGithub is false for the bare host).
-  github: "https://github.com/",
+  // Public source repository.
+  github: "https://github.com/deleq/deleq",
   ca: CA,
 } as const;
 
