@@ -11,6 +11,7 @@ export function GET() {
     "",
     `Console: ${BRAND.url}/console`,
     `Dashboard: ${BRAND.url}/dashboard`,
+    `Docs: ${BRAND.url}/docs (contract reference: ${BRAND.url}/docs/contract, HTTP API: ${BRAND.url}/docs/api)`,
     `Token check API (JSON): ${BRAND.url}/api/token-check?token=<address>`,
     `Mandate activity API (JSON): ${BRAND.url}/api/activity?owner=<address> or ?agent=<address>`,
     `DeleqMandateGuard: ${guardLive() ? CONTRACTS.guard : "not deployed yet"}`,

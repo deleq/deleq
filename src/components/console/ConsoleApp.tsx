@@ -554,6 +554,8 @@ function MandateEditor({
   const [days, setDays] = useState("30");
   const set = (p: Partial<StoredMandate>) => onChange({ ...stored, ...p });
   const shown = mode === "chain" && cm ? cm : toModel(stored);
+  // The draft is editable in Practice, and in On chain while no existing mandate is selected ("+ New mandate").
+  const editable = !(mode === "chain" && cm);
 
   async function addToken() {
     if (!isAddress(newToken) || stored.tokens.some((t) => lc(t.token) === lc(newToken))) return;
@@ -673,7 +675,7 @@ function MandateEditor({
                     <span className="font-semibold">
                       {t.symbol} <span className="font-mono text-[11px] font-normal text-[var(--faint)]">{shortAddress(t.token)}</span>
                     </span>
-                    {mode === "practice" ? (
+                    {editable ? (
                       <button type="button" className="chip" onClick={() => set({ tokens: stored.tokens.filter((_, i) => i !== k) })}>
                         Remove
                       </button>
@@ -702,7 +704,7 @@ function MandateEditor({
               );
             })}
           </div>
-          {mode === "practice" ? (
+          {editable ? (
             <div className="mt-3 flex gap-2">
               <input className="inp" placeholder="Add a token address 0x…" value={newToken} onChange={(e) => setNewToken(e.target.value.trim())} spellCheck={false} />
               <button type="button" className="btn btn-line btn-sm" onClick={addToken} disabled={!isAddress(newToken)}>
@@ -720,7 +722,7 @@ function MandateEditor({
             {shown.recipients.map((r) => (
               <span key={r} className="chip">
                 {shortAddress(r, 8, 6)}
-                {mode === "practice" ? (
+                {editable ? (
                   <button type="button" aria-label={`Remove ${r}`} onClick={() => set({ recipients: stored.recipients.filter((x) => x !== r) })}>
                     ×
                   </button>
@@ -728,7 +730,7 @@ function MandateEditor({
               </span>
             ))}
           </div>
-          {mode === "practice" ? (
+          {editable ? (
             <div className="mt-3 flex gap-2">
               <input className="inp" placeholder="0x… recipient" value={newRecipient} onChange={(e) => setNewRecipient(e.target.value.trim())} spellCheck={false} />
               <button
@@ -769,9 +771,9 @@ function MandateEditor({
           </div>
         </div>
 
-        {mode === "chain" && guardLive() ? (
+        {mode === "chain" && guardLive() && editable ? (
           <div className="grid gap-2 border-t border-[var(--line)] pt-4">
-            <p className="small">Create a new mandate on {CHAIN.name} from the practice draft (agent, caps, recipients, routers above in Practice). You become its owner.</p>
+            <p className="small">Create a new mandate on {CHAIN.name} from the draft above (agent, tokens and caps, recipients, routers, days). You become its owner.</p>
             <button type="button" className="btn btn-blue btn-sm w-fit" onClick={createOnChain} disabled={busy !== null} data-testid="create-onchain">
               <span className="gl">{busy === "create" ? "Confirm in wallet…" : "Create mandate on chain"}</span>
             </button>

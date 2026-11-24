@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
   htmlLimitedBots: /.*/,
   // Lets a second build (local end-to-end tests) live next to the production one.
   distDir: process.env.NEXT_DIST_DIR || ".next",
+  // The earlier tutorial page became the docs.
+  async redirects() {
+    return [{ source: "/tutorial", destination: "/docs", permanent: true }];
+  },
   async headers() {
     return [
       {

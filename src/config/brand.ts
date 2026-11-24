@@ -3,7 +3,7 @@
 // and every explorer link derive from it. Anything that is not a 0x + 40 hex address is treated as "not launched yet".
 
 /** Contract address of $DELEQ on Robinhood Chain. "TBA" until the token exists. */
-const CA: string = "TBA";
+const CA: string = "0x14eec7438bd130d71fd49c4f1a9593dfe84685b4";
 
 /**
  * True once the domain points at this deployment. While false, the production *.vercel.app host is served as is (kept

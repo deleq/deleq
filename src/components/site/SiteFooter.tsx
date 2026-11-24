@@ -34,6 +34,11 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link className="l" href="/docs">
+                  Docs
+                </Link>
+              </li>
+              <li>
                 <Link className="l" href="/method">
                   Method &amp; limits
                 </Link>
