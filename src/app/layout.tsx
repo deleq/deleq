@@ -1,0 +1,53 @@
+import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
+import "./globals.css";
+import { JsonLd } from "@/components/JsonLd";
+import { SiteFooter } from "@/components/site/SiteFooter";
+import { SiteHeader } from "@/components/site/SiteHeader";
+import { Motion } from "@/components/site/Motion";
+import { MOTION_BOOT } from "@/lib/motionBoot";
+import { WalletModalProvider } from "@/components/wallet/WalletButton";
+import { WalletProvider } from "@/components/wallet/WalletProvider";
+import { BRAND } from "@/config/brand";
+import { HOME_DESCRIPTION, HOME_TITLE, siteLd } from "@/lib/seo";
+
+// Self-hosted, SIL Open Font License (src/fonts/OFL-*.txt).
+const display = localFont({ src: [{ path: "../fonts/archivo-variable.woff2", weight: "100 900", style: "normal" }], variable: "--font-disp", display: "swap" });
+const text = localFont({ src: [{ path: "../fonts/instrument-sans-variable.woff2", weight: "400 700", style: "normal" }], variable: "--font-text", display: "swap" });
+const label = localFont({ src: [{ path: "../fonts/chivo-mono-variable.woff2", weight: "100 900", style: "normal" }], variable: "--font-label", display: "swap" });
+const pixel = localFont({ src: [{ path: "../fonts/geist-pixel-square.woff2", weight: "400", style: "normal" }], variable: "--font-px", display: "swap" });
+
+export const metadata: Metadata = {
+  metadataBase: new URL(BRAND.url),
+  title: { default: HOME_TITLE, template: `%s | ${BRAND.name}` },
+  description: HOME_DESCRIPTION,
+  applicationName: BRAND.name,
+};
+
+export const viewport: Viewport = { themeColor: "#1b2324", colorScheme: "dark" };
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className={`${display.variable} ${text.variable} ${label.variable} ${pixel.variable}`} suppressHydrationWarning>
+      <head>
+        {/* Motion gate before first paint (only without reduced motion); see components/site/Motion.tsx */}
+        <script dangerouslySetInnerHTML={{ __html: MOTION_BOOT }} />
+      </head>
+      <body>
+        <a className="bl-skip" href="#main">
+          Skip to content
+        </a>
+        <JsonLd data={siteLd} />
+        <WalletProvider>
+          <WalletModalProvider>
+            <SiteHeader />
+            <main id="main">{children}</main>
+            <SiteFooter />
+            <Motion />
+            <div className="noise" aria-hidden="true" />
+          </WalletModalProvider>
+        </WalletProvider>
+      </body>
+    </html>
+  );
+}
